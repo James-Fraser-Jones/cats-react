@@ -1,44 +1,80 @@
+import { useState } from "react";
+import ShopTable from "../components/ShopTable";
+import { Link } from "react-router-dom";
+
+//read-only
 const data = [
-  { name: "Smudge",
+  { id: 0,
+    name: "Smudge",
     price: 399,
-    quantity: 4,
   },
-  { name: "Luna",
+  { id: 1,
+    name: "Luna",
     price: 299,
-    quantity: 8,
   },
-  { name: "Edie",
+  { id: 2,
+    name: "Edie",
     price: 10000,
-    quantity: 1,
   },
-  { name: "Rain",
+  { id: 3,
+    name: "Rain",
     price: 745,
-    quantity: 2,
   },
-  { name: "Dog",
+  { id: 4,
+    name: "Dog",
     price: 230,
-    quantity: 6,
   },
-  { name: "Scrags",
+  { id: 5,
+    name: "Scrags",
     price: 100,
-    quantity: 15,
   },
-  { name: "Nega-Cat",
+  { id: 6,
+    name: "Nega-Cat",
     price: -777,
-    quantity: 99,
   },
 ];
 
+//state
+const initStock = [4, 8, 1, 2, 6, 15, 99];
+const initCart = [0, 0, 0, 0, 0, 0, 0];
+
 const Shop = () => {
+  const [stock, setStock] = useState(initStock);
+  const [cart, setCart] = useState(initCart);
+
+  const buy = (id, quantity) => {
+    let available = stock[id];
+    let bought = Math.min(available, quantity);
+    let newStock = stock.slice();
+    let newCart = cart.slice();
+    newStock[id] -= bought;
+    newCart[id] += bought;
+    setStock(newStock);
+    setCart(newCart);
+  }
+
+  const cancel = (id, quantity) => {
+    let available = cart[id];
+    let cancelled = Math.min(available, quantity);
+    let newStock = stock.slice();
+    let newCart = cart.slice();
+    newStock[id] += cancelled;
+    newCart[id] -= cancelled;
+    setStock(newStock);
+    setCart(newCart);
+  }
+
   return (
     <div>
       <h1>Shopping</h1>
       <p>See following table for items and prices: </p>
-      {/* pricing table */}
+      <ShopTable data={data} available={stock} btnText="Buy" btnFunc={buy} />
       <p>Your cart:</p>
-      {/* cart table */}
+      <ShopTable data={data} available={cart} btnText="Cancel" btnFunc={cancel} />
       <p>Total price:</p>
-      {/* total */}
+      <p>£0.00</p>
+      {/* <button onClick={() => buy(0, 3)}>Buybuybuyb</button> */}
+      <Link to="/success_shop" class="no-left"><button>Go to checkout</button></Link>
     </div>
   )
 }

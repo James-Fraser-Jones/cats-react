@@ -13,6 +13,10 @@ table {
   border-collapse: collapse;
 }
 
+th {
+  text-transform: capitalize;
+}
+
 th, td {
   border: 1px solid black;
   padding: 10px;
@@ -22,7 +26,7 @@ button, input {
   font-size: 1rem;
 }
 
-#home {
+.no-left {
   margin-left: 0px;
 }
 
