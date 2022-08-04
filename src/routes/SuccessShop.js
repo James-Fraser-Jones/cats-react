@@ -5,7 +5,7 @@ const SuccessShop = () => {
     <div>
       <h1>Purchase Sucessful!</h1>
       <p>Thanks for shopping at the cat website. :)</p>
-      <Link to="/" id="home">Home</Link>
+      <Link to="/" id="home" class="no-left">Home</Link>
     </div>
   )
 }

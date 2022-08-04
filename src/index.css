@@ -26,11 +26,15 @@ button, input {
   font-size: 1rem;
 }
 
+.button-right {
+  margin-left: 5px;
+}
+
 .no-left {
   margin-left: 0px;
 }
 
-#modal {
+.modal {
   position: fixed;
   background: rgba(0, 0, 0, 0.75);
   top: 0;
@@ -42,12 +46,16 @@ button, input {
   color: white;
 }
 
-#modal > div {
+.modal > div {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
 }
 
-#modal h4 {
+.modal h4 {
   margin-top: 0px;
+}
+
+.hide {
+  visibility: hidden;
 }

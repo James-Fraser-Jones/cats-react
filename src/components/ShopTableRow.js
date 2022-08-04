@@ -1,5 +1,6 @@
 const showPrice = price => {
   let str = price.toString();
+  str = "0".repeat(Math.max(3 - str.length, 0)) + str;
   let first = str.slice(0, -2);
   let second = str.slice(-2);
   let result = "£" + first;
@@ -11,7 +12,8 @@ const showPrice = price => {
 
 const getValues = obj => Object.entries(obj).slice(1).map(([_, value], index) => index === 1 ? showPrice(value) : value);
 
-const ShopTableRow = ({ id, row, available, btnText, btnFunc }) => {
+const ShopTableRow = ({ id, row, available, btnText, showModal }) => { 
+
   if (available === 0){
     return null;
   }
@@ -19,7 +21,7 @@ const ShopTableRow = ({ id, row, available, btnText, btnFunc }) => {
     <tr>
       {getValues(row).map((cell, index) => <td key={index}>{cell}</td>)}
       <td>{available}</td>
-      <td><button onClick={() => btnFunc(id, 1)}>{btnText}</button></td>
+      <td><button onClick={() => showModal(id)}>{btnText}</button></td>
     </tr>
   )
 }

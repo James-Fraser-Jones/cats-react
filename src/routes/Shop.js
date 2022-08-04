@@ -1,6 +1,20 @@
 import { useState } from "react";
-import ShopTable from "../components/ShopTable";
 import { Link } from "react-router-dom";
+
+import ShopTable from "../components/ShopTable";
+import ShopModal from "../components/ShopModal";
+
+const showPrice = price => {
+  let str = price.toString();
+  str = "0".repeat(Math.max(3 - str.length, 0)) + str;
+  let first = str.slice(0, -2);
+  let second = str.slice(-2);
+  let result = "£" + first;
+  if (second !== "00") {
+    result = result + ("." + second);
+  }
+  return result;
+}
 
 //read-only
 const data = [
@@ -42,6 +56,11 @@ const Shop = () => {
   const [stock, setStock] = useState(initStock);
   const [cart, setCart] = useState(initCart);
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalBuy, setModalBuy] = useState(true);
+  const [modalId, setModalId] = useState(0);
+  const [modalQuantity, setModalQuantity] = useState(1);
+
   const buy = (id, quantity) => {
     let available = stock[id];
     let bought = Math.min(available, quantity);
@@ -51,6 +70,8 @@ const Shop = () => {
     newCart[id] += bought;
     setStock(newStock);
     setCart(newCart);
+    setModalQuantity(1);
+    setModalVisible(false);
   }
 
   const cancel = (id, quantity) => {
@@ -62,19 +83,39 @@ const Shop = () => {
     newCart[id] -= cancelled;
     setStock(newStock);
     setCart(newCart);
+    setModalQuantity(1);
+    setModalVisible(false);
+  }
+
+  const showModal = buy => id => {
+    setModalBuy(buy);
+    setModalId(id);
+    setModalVisible(true);
   }
 
   return (
     <div>
       <h1>Shopping</h1>
       <p>See following table for items and prices: </p>
-      <ShopTable data={data} available={stock} btnText="Buy" btnFunc={buy} />
+      <ShopTable data={data} available={stock} btnText="Buy" showModal={showModal(true)}/>
       <p>Your cart:</p>
-      <ShopTable data={data} available={cart} btnText="Cancel" btnFunc={cancel} />
+      <ShopTable data={data} available={cart} btnText="Cancel" showModal={showModal(false)}/>
       <p>Total price:</p>
-      <p>£0.00</p>
-      {/* <button onClick={() => buy(0, 3)}>Buybuybuyb</button> */}
-      <Link to="/success_shop" class="no-left"><button>Go to checkout</button></Link>
+      <p>{showPrice(cart.map((quantity, id) => data.find(elem => elem.id === id).price * quantity).reduce((prev, next) => prev + next))}</p>
+      <Link to="/success_shop" className="no-left"><button>Go to checkout</button></Link>
+
+      <ShopModal 
+        modalVisible={modalVisible} 
+        modalBuy={modalBuy} 
+        modalId={modalId} 
+        buy={buy} 
+        cancel={cancel} 
+        hideSelf={() => {setModalVisible(false)}} 
+        data={data} 
+        modalQuantity={modalQuantity} 
+        setModalQuantity={setModalQuantity}
+      />
+
     </div>
   )
 }
