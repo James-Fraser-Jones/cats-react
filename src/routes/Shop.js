@@ -1,22 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { showPrice } from "../utils";
 
 import ShopTable from "../components/ShopTable";
 import ShopModal from "../components/ShopModal";
 
-const showPrice = price => {
-  let str = price.toString();
-  str = "0".repeat(Math.max(3 - str.length, 0)) + str;
-  let first = str.slice(0, -2);
-  let second = str.slice(-2);
-  let result = "£" + first;
-  if (second !== "00") {
-    result = result + ("." + second);
-  }
-  return result;
-}
-
-//read-only
+//read-only data
 const data = [
   { id: 0,
     name: "Smudge",
@@ -48,7 +37,7 @@ const data = [
   },
 ];
 
-//state
+//initial state
 const initStock = [4, 8, 1, 2, 6, 15, 99];
 const initCart = [0, 0, 0, 0, 0, 0, 0];
 
@@ -61,10 +50,11 @@ const Shop = () => {
   const [modalId, setModalId] = useState(0);
   const [modalQuantity, setModalQuantity] = useState(1);
 
-  const buy = (id, quantity) => {
+  const buy = (id, quan) => {
+    let quantity = Math.floor(quan);
     let available = stock[id];
     let bought = Math.min(available, quantity);
-    let newStock = stock.slice();
+    let newStock = stock.slice(); //have to copy state before modifying and setting with setStock
     let newCart = cart.slice();
     newStock[id] -= bought;
     newCart[id] += bought;
@@ -87,11 +77,15 @@ const Shop = () => {
     setModalVisible(false);
   }
 
-  const showModal = buy => id => {
+  const showModal = buy => id => { //function curried because it's convenient
     setModalBuy(buy);
     setModalId(id);
     setModalVisible(true);
   }
+
+  const total = cart
+    .map((quantity, id) => data.find(elem => elem.id === id).price * quantity)
+    .reduce((prev, next) => prev + next);
 
   return (
     <div>
@@ -101,7 +95,7 @@ const Shop = () => {
       <p>Your cart:</p>
       <ShopTable data={data} available={cart} btnText="Cancel" showModal={showModal(false)}/>
       <p>Total price:</p>
-      <p>{showPrice(cart.map((quantity, id) => data.find(elem => elem.id === id).price * quantity).reduce((prev, next) => prev + next))}</p>
+      <p>{showPrice(total)}</p>
       <Link to="/success_shop" className="no-left"><button>Go to checkout</button></Link>
 
       <ShopModal 
