@@ -26,6 +26,10 @@ button, input {
   font-size: 1rem;
 }
 
+pre {
+  font-family: 'Courier New', Courier, monospace
+}
+
 .button-right {
   margin-left: 5px;
 }
