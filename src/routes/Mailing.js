@@ -108,8 +108,7 @@ const Mailing = () => {
             <input type="range" min="0" max="50" onChange={handleFieldChange("volume")}/><br/><br/>
     
             <input type="submit" value="Submit"/>
-            <input type="reset" className="button-right"/>
-    
+            <input type="reset" onClick={() => setDetails(initDetails)} className="button-right"/>
           </form>
         </>
       : 
