@@ -6,7 +6,6 @@ import Gallery from "./routes/Gallery";
 import Mailing from "./routes/Mailing";
 import Shop from "./routes/Shop";
 import History from "./routes/History";
-import Success from "./routes/Success";
 import SuccessShop from "./routes/SuccessShop";
 
 const App = () => {
@@ -19,7 +18,6 @@ const App = () => {
         <Route path="/mailing" element={<Mailing/>} />
         <Route path="/shop" element={<Shop/>} />
         <Route path="/history" element={<History/>} />
-        <Route path="/success" element={<Success/>} />
         <Route path="/success_shop" element={<SuccessShop/>} />
       </Routes>
     </div>
