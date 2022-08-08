@@ -1,9 +1,23 @@
-const ShopModal = ({ modalVisible, modalBuy, modalId, buy, cancel, hideSelf, data, modalQuantity, setModalQuantity }) => {
-  const itemName = data.find(row => row.id === modalId).name;
+const ShopModal = ({ modalVisible, modalBuy, modalId, buy, cancel, hideSelf, data, modalQuantity, setModalQuantity }: {
+  modalVisible: boolean,
+  modalBuy: boolean,
+  modalId: number,
+  buy: (id: number, quan: number) => void,
+  cancel: (id: number, quan: number) => void,
+  hideSelf: () => void,
+  data: {
+      id: number;
+      name: string;
+      price: number;
+  }[],
+  modalQuantity: number,
+  setModalQuantity: React.Dispatch<React.SetStateAction<number>>,
+}) => {
+  const itemName = data.find(row => row.id === modalId)!.name;
   const header = (modalBuy ? "Buying" : "Cancelling") + " " + itemName;
 
-  const handleQuantityChange = event => {
-    let newQuantity = event.target.value;
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newQuantity = parseInt(event.target.value);
     setModalQuantity(newQuantity);
   }
 

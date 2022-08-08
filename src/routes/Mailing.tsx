@@ -14,7 +14,7 @@ const initDetails = {
   volume: 0,
 };
 
-function prettyDate(date) {
+function prettyDate(date: Date) {
   let pretty = "";
   pretty += date.getDate().toString().padStart(2, "0");
   pretty += "/" + (date.getMonth() + 1).toString().padStart(2, "0");
@@ -22,7 +22,7 @@ function prettyDate(date) {
   return pretty;
 }
 
-function prettyPrint(obj) {
+function prettyPrint(obj: typeof initDetails) {
   return Object.entries(obj).map(([key, value]) => {
     let printedVal;
     if (value instanceof Date) {
@@ -38,13 +38,15 @@ function prettyPrint(obj) {
 const Mailing = () => {
 
   const [details, setDetails] = useState(initDetails);
+  type detailsKey = keyof typeof details;
+
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(event) {
+  function handleSubmit() {
     setSubmitted(true);
   }
 
-  function handleRadioChange(event) {
+  function handleRadioChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.checked) {
       const newDetails = {...details};
       newDetails.gender = event.target.value;
@@ -52,9 +54,23 @@ const Mailing = () => {
     }
   }
 
-  const handleFieldChange = field => e => {
+  const handleFieldChange = (field: detailsKey) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDetails = {...details};
-    newDetails[field] = e.target.value;
+    
+    switch (field) {
+      case "dateOfBirth":
+        newDetails[field] = new Date(e.target.value);
+        break;
+      case "bumhead":
+        newDetails[field] = e.target.value === "true";
+        break;
+      case "volume":
+        newDetails[field] = parseInt(e.target.value);
+        break;
+      default:
+        newDetails[field] = e.target.value;
+    }
+    
     setDetails(newDetails);
   }
 

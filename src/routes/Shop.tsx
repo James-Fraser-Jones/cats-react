@@ -50,7 +50,7 @@ const Shop = () => {
   const [modalId, setModalId] = useState(0);
   const [modalQuantity, setModalQuantity] = useState(1);
 
-  const buy = (id, quan) => {
+  const buy = (id: number, quan: number) => {
     let quantity = Math.floor(quan);
     let available = stock[id];
     let bought = Math.min(available, quantity);
@@ -64,7 +64,7 @@ const Shop = () => {
     setModalVisible(false);
   }
 
-  const cancel = (id, quantity) => {
+  const cancel = (id: number, quantity: number) => {
     let available = cart[id];
     let cancelled = Math.min(available, quantity);
     let newStock = stock.slice();
@@ -77,14 +77,14 @@ const Shop = () => {
     setModalVisible(false);
   }
 
-  const showModal = buy => id => { //function curried because it's convenient
+  const showModal = (buy: boolean) => (id: number) => { //function curried because it's convenient
     setModalBuy(buy);
     setModalId(id);
     setModalVisible(true);
   }
 
   const total = cart
-    .map((quantity, id) => data.find(elem => elem.id === id).price * quantity)
+    .map((quantity, id) => data.find(elem => elem.id === id)!.price * quantity)
     .reduce((prev, next) => prev + next);
 
   return (
@@ -104,7 +104,7 @@ const Shop = () => {
         modalId={modalId} 
         buy={buy} 
         cancel={cancel} 
-        hideSelf={() => {setModalVisible(false)}} 
+        hideSelf={() => setModalVisible(false)} 
         data={data} 
         modalQuantity={modalQuantity} 
         setModalQuantity={setModalQuantity}
